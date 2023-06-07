@@ -5,139 +5,181 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  Button,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Platform,
   KeyboardAvoidingView,
   Keyboard,
-  TouchableWithoutFeedback,
 } from "react-native";
 import bgimage from "../../images/BG/bg.jpg";
+import { useOrientation } from "../../hooks/useOrientation";
+import { ButtonApp } from "../../components/ButtonApp/ButtonApp";
 
 export const LoginScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [activeInput, setActiveInput] = useState(null);
 
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-  };
+  let orientation = useOrientation();
+
+   const handleInputFocus = (inputName) => {
+     setActiveInput(inputName);
+   };
+
+   const handleInputBlur = () => {
+     setActiveInput(null);
+   };
+
   return (
-    // <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={styles.container}>
-      <ImageBackground style={styles.image} source={bgimage}>
-        {/* <View style={styles.bcg}> */}
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <TouchableWithoutFeedback
+      style={styles.container}
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
+      <ImageBackground
+        style={{
+          ...styles.imageBcg,
+          marginBottom: isShowKeyboard ? -250 : 0,
+        }}
+        source={bgimage}
+      >
+        <View
+          style={{
+            ...styles.loginWrap,
+            marginBottom: isShowKeyboard ? 80 : 0,
+            height: orientation === "landscape" ? "100%" : "60%",
+            marginHorizontal: orientation === "landscape" ? 150 : 0,
+          }}
         >
-          <View style={styles.registerWrap}>
-            <View style={styles.pageHeader}>
-              <Text style={styles.pageHeaderTitle}>Увійти</Text>
-            </View>
-
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
             <View
               style={{
                 ...styles.form,
-                marginBottom: isShowKeyboard ? 27 : 16,
+                marginHorizontal: orientation === "landscape" ? 100 : 16,
               }}
             >
+              <Text
+                style={{
+                  ...styles.pageHeaderTitle,
+                  marginVertical: orientation === "landscape" ? 16 : 32,
+                }}
+              >
+                Увійти
+              </Text>
+
               <TextInput
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
+                style={[
+                  styles.input,
+                  activeInput === "email" && styles.inputActive,
+                ]}
+                placeholderTextColor="#BDBDBD"
+                cursorColor="#FF6C00"
+                setIsShowKeyboard={setIsShowKeyboard}
+                onFocus={() => {
+                  handleInputFocus("email");
+                }}
+                onBlur={handleInputBlur}
                 placeholder="Адреса електронної пошти"
               ></TextInput>
-              <TextInput
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
-                secureTextEntry={true}
-                placeholder="Пароль"
-              >
-                <Text style={{ color: "black" }}>Показати</Text>
-              </TextInput>
+
+              <View style={styles.passwordWrap}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    activeInput === "password" && styles.inputActive,
+                  ]}
+                  cursorColor="#FF6C00"
+                  placeholderTextColor="#BDBDBD"
+                  setIsShowKeyboard={setIsShowKeyboard}
+                  onFocus={() => {
+                    handleInputFocus("password");
+                  }}
+                  onBlur={handleInputBlur}
+                  secureTextEntry={!isShowPassword}
+                  placeholder="Пароль"
+                ></TextInput>
+                <TouchableOpacity
+                  style={styles.btnShowPassword}
+                  onPress={() => setIsShowPassword(!isShowPassword)}
+                >
+                  <Text style={styles.btnHidePassword}>
+                    {isShowPassword ? "Приховати" : "Показати"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
+            <View
+              style={{
+                marginHorizontal: orientation === "landscape" ? 100 : 16,
+                marginTop: orientation === "landscape" ? 50 : 27,
+              }}
+            >
+              <ButtonApp btnText={"Увійти"} />
+            </View>
+          </KeyboardAvoidingView>
+          <View style={styles.linkWrap}>
+            <Text style={styles.link}>Немає акаунту? Зареєструватися</Text>
           </View>
-        </KeyboardAvoidingView>
-        <View style={styles.wrap}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.btn}
-            color={"#FFFFFF"}
-            onPress={keyboardHide}
-          >
-            <Text style={styles.btnTitle}>Увійти</Text>
-          </TouchableOpacity>
-          <Text style={styles.link}>Немає акаунту? Зареєструватися</Text>
         </View>
-        {/* </View> */}
       </ImageBackground>
-    </View>
-    // </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    // position: "relative",
     flex: 1,
   },
-  image: {
+  imageBcg: {
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
-  bcg: {
-    // backgroundColor: "#FFFFFF",
-    // borderTopLeftRadius: 25,
-    // borderTopRightRadius: 25,
-  },
-  registerWrap: {
-    backgroundColor: "#FFFFFF",
+  loginWrap: {
+    justifyContent: "center",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-  },
-  wrap: { backgroundColor: "#FFFFFF" },
-  form: {
-    marginHorizontal: 16,
-  },
-  pageHeader: {
-    marginVertical: 32,
-    // marginBottom: 32,
-    // marginTop: 92,
-    alignItems: "center",
+    backgroundColor: "#FFFFFF",
   },
   pageHeaderTitle: {
-    fontWeight: 500,
+    marginVertical: 32,
+    textAlign: "center",
+    fontFamily: "Roboto-Medium",
     fontSize: 30,
-    // textAlign: "center"
+    lineHeight: 35,
+    letterSpacing: 0.72,
   },
-
   input: {
-    borderWidth: 1,
-    borderColor: "#E8E8E8",
+    marginBottom: 16,
+    padding: 16,
     backgroundColor: "#F6F6F6",
+    borderColor: "#E8E8E8",
+    borderWidth: 1,
     borderRadius: 8,
-    height: 50,
-    padding: 16,
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
     color: "#212121",
-    marginBottom: 16,
   },
-  btn: {
-    marginHorizontal: 16,
-    height: 50,
-    borderRadius: 100,
-    padding: 16,
-    marginBottom: 16,
-    backgroundColor: "#FF6C00",
+  inputActive: { borderColor: "#FF6C00" },
+
+  btnShowPassword: {
+    position: "absolute",
+    right: 15,
+    top: 15,
   },
-  btnTitle: {
-    textAlign: "center",
-    color: "#FFFFFF",
-    fontWeight: 400,
+  btnHidePassword: {
     fontSize: 16,
-  },
-  link: {
-    fontWeight: 500,
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 144,
+    lineHeight: 19,
     color: "#1B4371",
+  },
+  linkWrap: { flex: 1, marginTop: 16 },
+  link: {
+    textAlign: "center",
+    color: "#1B4371",
+    fontSize: 16,
+    lineHeight: 19,
   },
 });
