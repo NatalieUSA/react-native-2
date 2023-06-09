@@ -10,25 +10,46 @@ import {
   Platform,
   KeyboardAvoidingView,
   Keyboard,
+  Alert,
 } from "react-native";
 import bgimage from "../../images/BG/bg.jpg";
 import { useOrientation } from "../../hooks/useOrientation";
 import { ButtonApp } from "../../components/ButtonApp/ButtonApp";
 
+initialState = {
+  email: "",
+  password: "",
+};
+
 export const LoginScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
+  const [state, setState] = useState(initialState);
 
   let orientation = useOrientation();
 
-   const handleInputFocus = (inputName) => {
-     setActiveInput(inputName);
-   };
+  const handleInputFocus = (inputName) => {
+    setActiveInput(inputName);
+  };
 
-   const handleInputBlur = () => {
-     setActiveInput(null);
-   };
+  const handleInputBlur = () => {
+    setActiveInput(null);
+  };
+
+  const onSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    console.log(state);
+    const { email, password } = state;
+    
+    if (email === "" || password === "") {
+ Alert.alert("email & password - is require");
+         return;
+       }
+    setState(initialState);
+    Alert.alert("Congrats Login successful");
+  }
 
   return (
     <TouchableWithoutFeedback
@@ -82,6 +103,10 @@ export const LoginScreen = () => {
                   handleInputFocus("email");
                 }}
                 onBlur={handleInputBlur}
+                value={state.email}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, email: value }))
+                }
                 placeholder="Адреса електронної пошти"
               ></TextInput>
 
@@ -99,6 +124,10 @@ export const LoginScreen = () => {
                   }}
                   onBlur={handleInputBlur}
                   secureTextEntry={!isShowPassword}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, password: value }))
+                  }
                   placeholder="Пароль"
                 ></TextInput>
                 <TouchableOpacity
@@ -117,7 +146,7 @@ export const LoginScreen = () => {
                 marginTop: orientation === "landscape" ? 50 : 27,
               }}
             >
-              <ButtonApp btnText={"Увійти"} />
+              <ButtonApp btnText={"Увійти"} onPress={onSubmit} />
             </View>
           </KeyboardAvoidingView>
           <View style={styles.linkWrap}>

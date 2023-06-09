@@ -11,15 +11,23 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Dimensions,
+  Alert,
 } from "react-native";
 import bgimage from "../../images/BG/bg.jpg";
 import { Avatar } from "../../components/Avatar/Avatar";
 import { ButtonApp } from "../../components/ButtonApp/ButtonApp";
 
+initialState = {
+  login: "",
+  email:"",
+  password:"",
+}
+
 export const RegistrationScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
+  const [state, setState]=useState(initialState)
 
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
@@ -35,10 +43,7 @@ export const RegistrationScreen = () => {
     };
   }, []);
 
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-  };
+
   const handleInputFocus = (inputName) => {
     setActiveInput(inputName);
   };
@@ -46,6 +51,20 @@ export const RegistrationScreen = () => {
   const handleInputBlur = () => {
     setActiveInput(null);
   };
+
+   const onSubmit = () => {
+     setIsShowKeyboard(false);
+     Keyboard.dismiss();
+     console.log(state);
+     const { email, password } = state;
+
+     if (email === "" || password === "") {
+       Alert.alert("email & password - is require");
+       return;
+     }
+     setState(initialState);
+     Alert.alert("Congrats Registration successful");
+   };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -80,6 +99,10 @@ export const RegistrationScreen = () => {
                     handleInputFocus("login");
                   }}
                   onBlur={handleInputBlur}
+                  value={state.login}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, login: value }))
+                  }
                   placeholder="Логін"
                 ></TextInput>
                 <TextInput
@@ -94,6 +117,10 @@ export const RegistrationScreen = () => {
                     handleInputFocus("email");
                   }}
                   onBlur={handleInputBlur}
+                  value={state.email}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, email: value }))
+                  }
                   placeholder="Адреса електронної пошти"
                 />
                 <View>
@@ -110,6 +137,13 @@ export const RegistrationScreen = () => {
                     }}
                     onBlur={handleInputBlur}
                     secureTextEntry={!isShowPassword}
+                    value={state.password}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({
+                        ...prevState,
+                        password: value,
+                      }))
+                    }
                     placeholder="Пароль"
                   />
                   <TouchableOpacity
@@ -129,6 +163,7 @@ export const RegistrationScreen = () => {
             <ButtonApp
               btnText={"Зареєстуватися"}
               style={{ width: dimensions }}
+              onPress={onSubmit}
             />
 
             <Text style={styles.link}>Вже є акаунт? Увійти</Text>
