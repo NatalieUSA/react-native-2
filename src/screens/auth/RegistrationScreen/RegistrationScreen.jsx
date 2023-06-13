@@ -13,9 +13,9 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
-import bgimage from "../../images/BG/bg.jpg";
-import { Avatar } from "../../components/Avatar/Avatar";
-import { ButtonApp } from "../../components/ButtonApp/ButtonApp";
+import bgimage from "../../../images/BG/bg.jpg";
+import { Avatar } from "../../../components/Avatar/Avatar";
+import { ButtonApp } from "../../../components/ButtonApp/ButtonApp";
 
 initialState = {
   login: "",
@@ -23,11 +23,11 @@ initialState = {
   password:"",
 }
 
-export const RegistrationScreen = () => {
+export const RegistrationScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
-  const [state, setState]=useState(initialState)
+  const [state, setState] = useState(initialState);
 
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
@@ -43,7 +43,6 @@ export const RegistrationScreen = () => {
     };
   }, []);
 
-
   const handleInputFocus = (inputName) => {
     setActiveInput(inputName);
   };
@@ -52,19 +51,19 @@ export const RegistrationScreen = () => {
     setActiveInput(null);
   };
 
-   const onSubmit = () => {
-     setIsShowKeyboard(false);
-     Keyboard.dismiss();
-     console.log(state);
-     const { email, password } = state;
+  const onSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    console.log(state);
+    const { email, password } = state;
 
-     if (email === "" || password === "") {
-       Alert.alert("email & password - is require");
-       return;
-     }
-     setState(initialState);
-     Alert.alert("Congrats Registration successful");
-   };
+    if (email === "" || password === "") {
+      Alert.alert("email & password - is require");
+      return;
+    }
+    setState(initialState);
+    Alert.alert("Congrats Registration successful");
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -165,8 +164,9 @@ export const RegistrationScreen = () => {
               style={{ width: dimensions }}
               onPress={onSubmit}
             />
-
-            <Text style={styles.link}>Вже є акаунт? Увійти</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.link}>Вже є акаунт? Увійти</Text>
+            </TouchableOpacity>
           </View>
         </ImageBackground>
       </View>

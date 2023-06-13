@@ -12,22 +12,23 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
-import bgimage from "../../images/BG/bg.jpg";
-import { useOrientation } from "../../hooks/useOrientation";
-import { ButtonApp } from "../../components/ButtonApp/ButtonApp";
+import bgimage from "../../../images/BG/bg.jpg";
+import { useOrientation } from "../../../hooks/useOrientation";
+import { ButtonApp } from "../../../components/ButtonApp/ButtonApp";
 
 initialState = {
   email: "",
   password: "",
 };
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation }) => {
+  // console.log("navigation", navigation);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
   const [state, setState] = useState(initialState);
 
-  let orientation = useOrientation();
+  const orientation = useOrientation();
 
   const handleInputFocus = (inputName) => {
     setActiveInput(inputName);
@@ -42,14 +43,14 @@ export const LoginScreen = () => {
     Keyboard.dismiss();
     console.log(state);
     const { email, password } = state;
-    
+
     if (email === "" || password === "") {
- Alert.alert("email & password - is require");
-         return;
-       }
+      Alert.alert("email & password - is require");
+      return;
+    }
     setState(initialState);
     Alert.alert("Congrats Login successful");
-  }
+  };
 
   return (
     <TouchableWithoutFeedback
@@ -150,7 +151,17 @@ export const LoginScreen = () => {
             </View>
           </KeyboardAvoidingView>
           <View style={styles.linkWrap}>
-            <Text style={styles.link}>Немає акаунту? Зареєструватися</Text>
+            <Text style={{ ...styles.link }}>
+              Немає акаунту?{" "}
+              <TouchableOpacity>
+                <Text
+                  style={{ ...styles.link, textDecorationLine: "underline" }}
+                  onPress={() => navigation.navigate("Registration")}
+                >
+                  Зареєструватися
+                </Text>
+              </TouchableOpacity>
+            </Text>
           </View>
         </View>
       </ImageBackground>
@@ -204,11 +215,23 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#1B4371",
   },
-  linkWrap: { flex: 1, marginTop: 16 },
+  linkWrap: {
+    flex: 1,
+    marginTop: 16,
+    // alignItems: "center",
+    // justifyContent: "center",
+    // alignContent: "center"
+    // alignSelf: "center"
+    
+
+  },
   link: {
     textAlign: "center",
     color: "#1B4371",
     fontSize: 16,
     lineHeight: 19,
+    // alignItems: "center",
+    // justifyContent: "center",
+    // alignContent: "center"
   },
 });
