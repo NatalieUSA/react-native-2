@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 100,
-    backgroundColor: "#FF6C00",
+     backgroundColor: "#FF6C00",
   },
   text: {
     alignSelf: "center",

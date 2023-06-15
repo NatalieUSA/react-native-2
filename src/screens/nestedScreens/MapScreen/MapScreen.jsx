@@ -1,10 +1,43 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+//API key created
+//Use this key in your application by passing it with the key = API_KEY parameter.
+  //AIzaSyAo3aIaxLDO - MEs38yYdcRM - 4WbQDmTTAE
 
-export const MapScreen = () => {
+import React from "react";
+import MapView, { Marker } from "react-native-maps";
+import { View, StyleSheet, Dimensions } from "react-native";
+
+export const MapScreen = ({ route }) => {
+  // console.log(
+  //   "MAP+++++++++>>>>route.params.location",
+  //   route.params.location.latitude
+  // );
+
+  const { latitude, longitude } = route.params.location;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.pageHeaderTitle}>MapScreen</Text>
+      <MapView
+        style={styles.mapStyle}
+        region={{
+          latitude,
+          longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+        mapType="standard"
+        minZoomLevel={15}
+        onMapReady={() => console.log("Map is ready")}
+        onRegionChange={() => console.log("Region change")}
+      >
+        <Marker
+          title="I am here"
+          coordinate={{
+            latitude,
+            longitude,
+          }}
+          description="Hello"
+        />
+      </MapView>
     </View>
   );
 };
@@ -14,13 +47,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#FFFFFF",
   },
-  pageHeaderTitle: {
-    marginVertical: 32,
-    textAlign: "center",
-    fontFamily: "Roboto-Medium",
-    fontSize: 30,
-    lineHeight: 35,
-    letterSpacing: 0.72,
+  mapStyle: {
+    // width: Dimensions.get("window").width,
+    // height: Dimensions.get("window").height,
+    width: "100%",
+    height: "100%"
   },
 });
