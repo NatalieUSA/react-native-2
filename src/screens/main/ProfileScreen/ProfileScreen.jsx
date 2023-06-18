@@ -11,9 +11,16 @@ import { Feather } from "@expo/vector-icons";
 import bgimage from "../../../images/BG/bg.jpg"
 import { Avatar } from "../../../components/Avatar/Avatar";
 
+import { authLogout } from "../../../../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
+
 export const ProfileScreen = () => {
 
+  const dispatch = useDispatch();
 
+  const onLogOut = () => {
+    dispatch(authLogout())
+  }
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.imageBcg} source={bgimage}>
@@ -21,7 +28,10 @@ export const ProfileScreen = () => {
           <View style={styles.avatarWrap}>
             <Avatar />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            // onPress={()=>{dispatch(authLogout())}}
+             onPress={onLogOut}
+          >
             <Feather
               name="log-out"
               size={24}
@@ -39,10 +49,9 @@ export const ProfileScreen = () => {
               alignItems: "center",
               marginVertical: 100,
               borderRadius: 25,
-              paddingHorizontal:50,
+              paddingHorizontal: 50,
             }}
           >
-           
             <Text>There are no posts yet ¯\_(ツ)_/¯</Text>
           </View>
         </View>

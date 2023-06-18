@@ -1,17 +1,16 @@
 import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
 import { useCallback } from "react";
 // import { AppLoading } from "expo";
 // import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useFonts } from "expo-font";
-import { StyleSheet, View } from "react-native";
+import { useFonts } from "expo-font";;
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
+import { Main } from "./src/screens/main/Main";
 
-import { useRoute } from "./router";
-// const AuthStack = createStackNavigator();
- 
+
+
 export default function App() {
-
   SplashScreen.preventAutoHideAsync();
   const [fontsLoaded] = useFonts({
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -29,31 +28,22 @@ export default function App() {
     return null;
   }
 
-  const routing = useRoute(true)
+  // const routing = useRoute(false)
 
   return (
-    <NavigationContainer style={styles.container}>
-    {routing}
-    </NavigationContainer>
+    <Provider store={store}>
+      <Main />
+      {/* <NavigationContainer style={styles.container}>
+        {routing}
+      </NavigationContainer> */}
+    </Provider>
   );
 }
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#fff",
+//   },
 
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-
-  // text: {
-  //   fontFamily: "Roboto-Regular",
-  //   color: "white",
-  //   fontSize: 42,
-  //   lineHeight: 84,
-  //   fontWeight: "bold",
-  //   textAlign: "center",
-  //   backgroundColor: "#000000c0",
-  // },
-});
+// });

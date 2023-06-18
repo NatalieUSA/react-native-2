@@ -17,6 +17,9 @@ import bgimage from "../../../images/BG/bg.jpg";
 import { Avatar } from "../../../components/Avatar/Avatar";
 import { ButtonApp } from "../../../components/ButtonApp/ButtonApp";
 
+import { useDispatch } from "react-redux";
+import { authRegistration } from "../../../../redux/auth/authOperations";
+
 initialState = {
   login: "",
   email:"",
@@ -29,6 +32,8 @@ export const RegistrationScreen = ({ navigation }) => {
   const [activeInput, setActiveInput] = useState(null);
   const [state, setState] = useState(initialState);
 
+  const dispatch = useDispatch();
+
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -39,7 +44,7 @@ export const RegistrationScreen = ({ navigation }) => {
     };
     Dimensions.addEventListener("change", onChange);
     return () => {
-      Dimensions.removeEventListener("change", onChange);
+      Dimensions.removeEventListene("change", onChange);
     };
   }, []);
 
@@ -55,14 +60,18 @@ export const RegistrationScreen = ({ navigation }) => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     console.log(state);
+      dispatch(authRegistration(state));
     const { email, password } = state;
 
     if (email === "" || password === "") {
       Alert.alert("email & password - is require");
       return;
     }
+ 
+      // { Alert.alert("Congrats Registration successful");}
     setState(initialState);
-    Alert.alert("Congrats Registration successful");
+   
+   
   };
 
   return (

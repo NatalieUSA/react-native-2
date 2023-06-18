@@ -24,7 +24,7 @@ import {
 import { useOrientation } from "../../../hooks/useOrientation";
 import { ButtonApp } from "../../../components/ButtonApp/ButtonApp";
 
-initialState = {
+initialValues = {
   title: "",
   place: "",
 };
@@ -39,7 +39,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [activeInput, setActiveInput] = useState(null);
 
-  const [state, setState] = useState(initialState);
+  const [values, setValues] = useState(initialValues);
 
   useEffect(() => {
     (async () => {
@@ -85,7 +85,7 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   const onSubmitPost = () => {
     console.log("NAVIGATION", navigation);
-    const { title, place } = state;
+    const { title, place } = values;
     if (!photo) {
       Alert.alert("Add photo, pls");
       return;
@@ -100,12 +100,12 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const onDelitePost = () => {
-    setState(initialState);
+    setValues(initialValues);
     setPhoto("");
   };
 
   const onChangeInputText = (value, name) => {
-    setState((prevState) => ({ ...prevState, [name]: value }));
+    setValues((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleInputFocus = (inputName) => {
@@ -218,7 +218,7 @@ export const CreatePostsScreen = ({ navigation }) => {
                   handleInputFocus("name");
                 }}
                 onBlur={handleInputBlur}
-                value={state.title}
+                value={values.title}
                 onChangeText={(value) => onChangeInputText(value, "title")}
                 placeholder="Назва..."
               />
@@ -236,7 +236,7 @@ export const CreatePostsScreen = ({ navigation }) => {
                     handleInputFocus("location");
                   }}
                   onBlur={handleInputBlur}
-                  value={state.place}
+                  value={values.place}
                   onChangeText={(value) => onChangeInputText(value, "place")}
                   placeholder="Місцевість..."
                 />

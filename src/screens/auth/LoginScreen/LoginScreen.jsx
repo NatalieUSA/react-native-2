@@ -16,6 +16,9 @@ import bgimage from "../../../images/BG/bg.jpg";
 import { useOrientation } from "../../../hooks/useOrientation";
 import { ButtonApp } from "../../../components/ButtonApp/ButtonApp";
 
+import { useDispatch } from "react-redux";
+import { authLogin } from "../../../../redux/auth/authOperations";
+
 initialState = {
   email: "",
   password: "",
@@ -27,6 +30,8 @@ export const LoginScreen = ({ navigation }) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
   const [state, setState] = useState(initialState);
+
+  const dispatch = useDispatch();
 
   const orientation = useOrientation();
 
@@ -42,16 +47,20 @@ export const LoginScreen = ({ navigation }) => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     console.log(state);
+     dispatch(authLogin(state));
     const { email, password } = state;
 
     if (email === "" || password === "") {
       Alert.alert("email & password - is require");
       return;
     }
+   
     setState(initialState);
-    Alert.alert("Congrats Login successful");
+    //Alert.alert("Congrats Login successful");
   };
 
+
+  
   return (
     <TouchableWithoutFeedback
       style={styles.container}
