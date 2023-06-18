@@ -24,6 +24,11 @@ import {
 import { useOrientation } from "../../../hooks/useOrientation";
 import { ButtonApp } from "../../../components/ButtonApp/ButtonApp";
 
+// import { auth } from "../../firebase/config";
+import { storage } from "../../../../firebase/config";
+import { uploadBytes } from "firebase/storage";
+
+
 initialValues = {
   title: "",
   place: "",

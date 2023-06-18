@@ -12,10 +12,10 @@ import bgimage from "../../../images/BG/bg.jpg"
 import { Avatar } from "../../../components/Avatar/Avatar";
 
 import { authLogout } from "../../../../redux/auth/authOperations";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const ProfileScreen = () => {
-
+const { nickName } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const onLogOut = () => {
@@ -39,7 +39,7 @@ export const ProfileScreen = () => {
               style={styles.btnLogOut}
             />
           </TouchableOpacity>
-          <Text style={styles.userName}>User Name</Text>
+          <Text style={styles.userName}>{nickName}</Text>
 
           <View
             style={{

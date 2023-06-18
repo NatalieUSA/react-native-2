@@ -11,11 +11,18 @@ import { Home } from "./src/screens/main/Home/Home.jsx";
 
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
+import { authLogout } from "./redux/auth/authOperations.js";
 
 const AuthStack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
 export const useRoute = (isAuth) => {
+   const dispatch = useDispatch();
+
+   const onLogOut = () => {
+     dispatch(authLogout());
+   };
   if (!isAuth) {
     return (
       <AuthStack.Navigator>
@@ -57,16 +64,21 @@ export const useRoute = (isAuth) => {
       }}
     >
       <BottomTab.Screen
-        name="Home"
+        name="Публікації"
         component={Home}
         options={{
-          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => (
             <Feather name="grid" size={size} color={color} focused={focused} />
           ),
           headerRight: ({ focused, color, size }) => (
-            <TouchableOpacity>
-              <Feather name="log-out" size={24} color="#BDBDBD" />
+            <TouchableOpacity
+              onPress={onLogOut}
+            >
+              <Feather
+                name="log-out"
+                size={24}
+                color="#BDBDBD"
+              />
             </TouchableOpacity>
           ),
           headerStyle: {

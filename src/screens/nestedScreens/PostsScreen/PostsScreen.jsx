@@ -8,12 +8,15 @@ import {
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 export const PostsScreen = ({ navigation, route, place, title }) => {
   console.log("title--------->>>", title);
   console.log("place--------->>>", place);
   const [posts, setPosts] = useState([]);
   console.log("route===>>PostsScreen", route.params);
+
+const {userEmail, nickName}=useSelector((state)=>state.auth)
 
   useEffect(() => {
     if (route.params) {
@@ -51,8 +54,8 @@ export const PostsScreen = ({ navigation, route, place, title }) => {
             flexDirection: "column",
           }}
         >
-          <Text style={styles.userName}>user.nickName</Text>
-          <Text style={styles.userEmail}>user.userEmail</Text>
+          <Text style={styles.userNickName}>{nickName}</Text>
+          <Text style={styles.userEmail}>{userEmail}</Text>
         </View>
       </View>
 
@@ -73,14 +76,8 @@ export const PostsScreen = ({ navigation, route, place, title }) => {
                   size={24}
                   color="#BDBDBD"
                   onPress={() => navigation.navigate("Comments")}
-              
                 />
-                <Text
-                  style={styles.postBtnText}
-        
-                >
-                  1000
-                </Text>
+                <Text style={styles.postBtnText}>1000</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
@@ -88,20 +85,9 @@ export const PostsScreen = ({ navigation, route, place, title }) => {
                   justifyContent: "center",
                   alignItems: "baseline",
                 }}
-              
               >
-                <Feather
-                  name="thumbs-up"
-                  size={24}
-                  color="#BDBDBD"
-                
-                />
-                <Text
-                  style={styles.postBtnText}
-              
-                >
-                  25466
-                </Text>
+                <Feather name="thumbs-up" size={24} color="#BDBDBD" />
+                <Text style={styles.postBtnText}>25466</Text>
               </TouchableOpacity>
               <View style={styles.postLocationWrap}>
                 <TouchableOpacity
@@ -169,12 +155,20 @@ const styles = StyleSheet.create({
     color: "#212121",
   },
 
- 
   postLocationWrap: {
     flexDirection: "row",
     alignItems: "center",
     marginLeft: "auto",
   },
- 
-
+  userNickName: {
+    fontFamily: "Roboto-Bold",
+    fontSize: 13,
+    lineHeight: 15,
+    color:"#212121",
+  },
+  userEmail: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 11,
+    lineHeight: 13,
+    color: "rgba(33, 33, 33, 0.8)" },
 });
